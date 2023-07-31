@@ -1777,12 +1777,12 @@ else
 fi
 cp -Rf ${HOME_PATH}/build_logo/config.txt UPLOAD/build/${FOLDER_NAME}/${CONFIG_FILE}
 echo "${SOURCE}-${REPO_BRANCH}-${CONFIG_FILE}-$(date +%Y年%m月%d号%H时%M分%S秒)" > UPLOAD/build/${FOLDER_NAME}/relevance/start
-
+echo "准备Upload"
 cd UPLOAD
 BRANCH_HEAD="$(git rev-parse --abbrev-ref HEAD)"
 git add .
 git commit -m "${kaisbianyixx}-${FOLDER_NAME}-${LUCI_EDITION}-${TARGET_PROFILE}固件"
-echo "${REPO_TOKEN}"
+echo "准备推送Commit"
 git push --force "https://${REPO_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:${BRANCH_HEAD}
 }
 
