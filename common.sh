@@ -1555,6 +1555,35 @@ fi
 }
 
 
+function Diy_wifimodules() {
+cd ${HOME_PATH}
+echo '
+CONFIG_PACKAGE_kmod-cfg80211=y
+CONFIG_PACKAGE_kmod-iwlwifi=y
+CONFIG_PACKAGE_kmod-mac80211=y
+CONFIG_PACKAGE_MAC80211_DEBUGFS=y
+CONFIG_PACKAGE_MAC80211_MESH=y
+CONFIG_PACKAGE_wireless-regdb=y
+CONFIG_PACKAGE_kmod-ath9k=y
+CONFIG_PACKAGE_hostapd=y
+CONFIG_PACKAGE_hostapd-basic=y
+CONFIG_PACKAGE_hostapd-common=y
+CONFIG_PACKAGE_hostapd-mini=y
+CONFIG_PACKAGE_wpa-supplicant=y
+CONFIG_WPA_MSG_MIN_PRIORITY=3
+CONFIG_WPA_RFKILL_SUPPORT=y
+CONFIG_DRIVER_WEXT_SUPPORT=y
+CONFIG_DRIVER_11AC_SUPPORT=y
+CONFIG_DRIVER_11AX_SUPPORT=y
+CONFIG_WPA_ENABLE_WEP=y
+CONFIG_WPA_MBO_SUPPORT=y
+CONFIG_PACKAGE_wireless-regdb=y
+CONFIG_PACKAGE_wireless-tools=y
+CONFIG_PACKAGE_iwlwifi-firmware-ax210=y
+' >> ${HOME_PATH}/.config
+}
+
+
 function openwrt_armvirt() {
 cd ${GITHUB_WORKSPACE}
 export FOLDER_NAME2="${GITHUB_WORKSPACE}/REPOSITORY"
@@ -2038,6 +2067,7 @@ Make_defconfig
 Diy_Publicarea2
 Diy_adguardhome
 Diy_upgrade2
+Diy_wifimodules
 }
 
 function Diy_menu5() {
