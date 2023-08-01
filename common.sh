@@ -307,9 +307,9 @@ COOLSNOWWOLF)
 #find . -type d -name "r8168" -o -name "r8101" -o -name "r8125" |grep 'danshui' |xargs -i rm -rf {}
     git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon "${HOME_PATH}/package/lean/luci-theme-argon"
     git clone -b 18.06 https://github.com/jerrykuku/luci-app-argon-config "${HOME_PATH}/package/lean/luci-app-argon-config"
-    git clone https://github.com/JimWails/luci-app-v2ray-server "${HOME_PATH}/feeds/luci/applications/luci-app-v2ray-server"
-    git clone https://github.com/JimWails/luci-app-samba4 "${HOME_PATH}/feeds/luci/applications/luci-app-samba4"
-    git clone https://github.com/JimWails/libuild "${HOME_PATH}/package/libuild"
+    git clone https://github.com/bootli/luci-app-v2ray-server "${HOME_PATH}/feeds/luci/applications/luci-app-v2ray-server"
+    git clone https://github.com/bootli/luci-app-samba4 "${HOME_PATH}/feeds/luci/applications/luci-app-samba4"
+    git clone https://github.com/bootli/libuild "${HOME_PATH}/package/libuild"
     git clone https://github.com/sirpdboy/luci-app-ddns-go "${HOME_PATH}/package/ddns-go"
  
     if [[ ! -f "${HOME_PATH}/target/linux/ramips/mt7621/config-5.15" ]]; then
@@ -1161,7 +1161,7 @@ fi
 if [[ `grep -c "CONFIG_PACKAGE_luci-theme-argon=y" ${HOME_PATH}/.config` -eq '1' ]]; then
   pmg="$(echo "$(date +%d)" | sed 's/^.//g')"
   mkdir -p ${HOME_PATH}/files/www/luci-static/argon/background
-  curl -fsSL https://raw.githubusercontent.com/JimWails/image/main/jpg/jpg/1.jpg -o ${HOME_PATH}/files/www/luci-static/argon/background/moren.jpg
+  curl -fsSL https://raw.githubusercontent.com/bootli/image/main/jpg/jpg/1.jpg -o ${HOME_PATH}/files/www/luci-static/argon/background/moren.jpg
   if [[ $? -ne 0 ]]; then
     echo "拉取文件错误,请检测网络"
     exit 1
@@ -1513,9 +1513,9 @@ fi
 if [[ ! "${weizhicpu}" == "1" ]] && [[ "${AdGuardHome_Core}" == "1" ]]; then
   echo "正在执行：给adguardhome下载核心"
   rm -rf ${HOME_PATH}/AdGuardHome && rm -rf ${HOME_PATH}/files/usr/bin
-  wget -q https://github.com/JimWails/common/releases/download/API/AdGuardHome.api -O AdGuardHome.api
+  wget -q https://github.com/bootli/common/releases/download/API/AdGuardHome.api -O AdGuardHome.api
   if [[ $? -ne 0 ]];then
-    curl -fsSL https://github.com/JimWails/common/releases/download/API/AdGuardHome.api -o AdGuardHome.api
+    curl -fsSL https://github.com/bootli/common/releases/download/API/AdGuardHome.api -o AdGuardHome.api
   fi
   latest_ver="$(grep -E 'tag_name' 'AdGuardHome.api' |grep -E 'v[0-9.]+' -o 2>/dev/null)"
   rm -rf AdGuardHome.api
