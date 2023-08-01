@@ -175,7 +175,7 @@ echo "HOME_PATH=${GITHUB_WORKSPACE}/openwrt" >> ${GITHUB_ENV}
 echo "SOURCE_CODE=${SOURCE_CODE}" >> ${GITHUB_ENV}
 echo "REPO_URL=${REPO_URL}" >> ${GITHUB_ENV}
 echo "REPO_BRANCH=${REPO_BRANCH}" >> ${GITHUB_ENV}
-echo "GITHUB_TOKEN=${GITHUB_TOKEN}" >> ${GITHUB_ENV}
+echo "REPO_TOKEN=${REPO_TOKEN}" >> ${GITHUB_ENV}
 echo "CONFIG_FILE=${CONFIG_FILE}" >> ${GITHUB_ENV}
 echo "CPU_SELECTION=${CPU_SELECTION}" >> ${GITHUB_ENV}
 echo "INFORMATION_NOTICE=${INFORMATION_NOTICE}" >> ${GITHUB_ENV}
@@ -1604,7 +1604,7 @@ chmod -R +x ${FOLDER_NAME2}
 cd ${FOLDER_NAME2}
 git add .
 git commit -m "启动打包Amlogic/Rockchip固件(${SOURCE}-${LUCI_EDITION})"
-git push --force "https://${GITHUB_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:main
+git push --force "https://${REPO_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:main
 }
 
 function firmware_jiance() {
@@ -1635,7 +1635,7 @@ if [[ -z "${amlogic_kernel}" ]]; then
   export amlogic_kernel="$(grep -Eo '"name": "[0-9]+\.[0-9]+\.[0-9]+\.tar.gz"' ${HOME_PATH}/${kernel_usage}.api |grep -Eo "[0-9]+\.[0-9]+\.[0-9]+" |awk 'END {print}' |sed s/[[:space:]]//g)"
   [[ -z "${amlogic_kernel}" ]] && export amlogic_kernel="5.10.170"
 fi
-export gh_token="${GITHUB_TOKEN}"
+export gh_token="${REPO_TOKEN}"
 
 echo "芯片型号：${amlogic_model}"
 echo "使用内核：${amlogic_kernel}"
@@ -1648,7 +1648,7 @@ git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git ${GITHUB_
 if [[ `ls -1 "${FIRMWARE_PATH}" |grep -c ".*.tar.gz"` -eq '1' ]]; then
   cp -Rf ${FIRMWARE_PATH}/*.tar.gz ${GITHUB_WORKSPACE}/amlogic/openwrt-armvirt/openwrt-armvirt-64-default-rootfs.tar.gz && sync
 else
-  curl -H "Authorization: Bearer ${GITHUB_TOKEN}" https://api.github.com/repos/${GIT_REPOSITORY}/releases/tags/targz -o targz.api
+  curl -H "Authorization: Bearer ${REPO_TOKEN}" https://api.github.com/repos/${GIT_REPOSITORY}/releases/tags/targz -o targz.api
   if [[ $? -ne 0 ]];then
     TIME r "下载api失败"
     exit 1
@@ -1783,7 +1783,7 @@ BRANCH_HEAD="$(git rev-parse --abbrev-ref HEAD)"
 git add .
 git commit -m "${kaisbianyixx}-${FOLDER_NAME}-${LUCI_EDITION}-${TARGET_PROFILE}固件"
 echo "准备推送Commit"
-git push --force "https://${GITHUB_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:${BRANCH_HEAD}
+git push --force "https://${REPO_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:${BRANCH_HEAD}
 }
 
 
@@ -1856,7 +1856,7 @@ if [[ "${Continue_selecting}" == "1" ]]; then
   BRANCH_HEAD="$(git rev-parse --abbrev-ref HEAD)"
   git add .
   git commit -m "${chonglaixx}-${FOLDER_NAME}-${LUCI_EDITION}-${TARGET_PROFILE}固件"
-  git push --force "https://${GITHUB_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:${BRANCH_HEAD}
+  git push --force "https://${REPO_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:${BRANCH_HEAD}
   exit 1
 fi
 }
@@ -1871,7 +1871,7 @@ fi
 all_workflows_list="josn_api_workflows"
 curl -s \
 -H "Accept: application/vnd.github+json" \
--H "Authorization: Bearer ${GITHUB_TOKEN}" \
+-H "Authorization: Bearer ${REPO_TOKEN}" \
 https://api.github.com/repos/${GIT_REPOSITORY}/actions/runs |
 jq -c '.workflow_runs[] | select(.conclusion == "failure") | {date: .updated_at, id: .id, name: .name, run_number: .run_number}' \
 >${all_workflows_list}
@@ -1884,7 +1884,7 @@ if [[ -f "josn_api" && -n "$(cat josn_api | jq -r .id)" ]]; then
       curl -s \
       -X DELETE \
       -H "Accept: application/vnd.github+json" \
-      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+      -H "Authorization: Bearer ${REPO_TOKEN}" \
       https://api.github.com/repos/${GIT_REPOSITORY}/actions/runs/${run_id}
     }
   done
@@ -1977,13 +1977,13 @@ else
     TIME r "把定时自动更新插件编译进固件: 关闭"
   fi
 fi
-if [[ "${UPDATE_FIRMWARE_ONLINE}" == "true" ]] && [[ -z "${GITHUB_TOKEN}" ]]; then
+if [[ "${UPDATE_FIRMWARE_ONLINE}" == "true" ]] && [[ -z "${REPO_TOKEN}" ]]; then
   echo
   echo
-  TIME r "您虽然开启了编译在线更新固件操作,但是您的[GITHUB_TOKEN]密匙为空,"
+  TIME r "您虽然开启了编译在线更新固件操作,但是您的[REPO_TOKEN]密匙为空,"
   TIME r "无法将固件发布至云端,已为您自动关闭了编译在线更新固件"
   echo
-elif [[ "${UPDATE_FIRMWARE_ONLINE}" == "true" ]] && [[ -n "${GITHUB_TOKEN}" ]]; then
+elif [[ "${UPDATE_FIRMWARE_ONLINE}" == "true" ]] && [[ -n "${REPO_TOKEN}" ]]; then
   echo
   TIME l "定时自动更新信息"
   TIME z "插件版本: ${AutoUpdate_Version}"
