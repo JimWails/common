@@ -1,5 +1,5 @@
 #!/bin/bash
-# https://github.com/bootli/build-actions
+# https://github.com/JimWails/build-actions
 # common Module by 
 # matrix.target=${FOLDER_NAME}
 
@@ -26,7 +26,7 @@ Compte=$(date +%Y年%m月%d号%H时%M分)
 
 function settings_variable() {
 cd ${GITHUB_WORKSPACE}
-bash <(curl -fsSL https://raw.githubusercontent.com/bootli/common/main/custom/first.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/JimWails/common/main/custom/first.sh)
 }
 
 function Diy_variable() {
@@ -175,7 +175,7 @@ echo "HOME_PATH=${GITHUB_WORKSPACE}/openwrt" >> ${GITHUB_ENV}
 echo "SOURCE_CODE=${SOURCE_CODE}" >> ${GITHUB_ENV}
 echo "REPO_URL=${REPO_URL}" >> ${GITHUB_ENV}
 echo "REPO_BRANCH=${REPO_BRANCH}" >> ${GITHUB_ENV}
-echo "REPO_TOKEN=${REPO_TOKEN}" >> ${GITHUB_ENV}
+echo "GITHUB_TOKEN=${GITHUB_TOKEN}" >> ${GITHUB_ENV}
 echo "CONFIG_FILE=${CONFIG_FILE}" >> ${GITHUB_ENV}
 echo "CPU_SELECTION=${CPU_SELECTION}" >> ${GITHUB_ENV}
 echo "INFORMATION_NOTICE=${INFORMATION_NOTICE}" >> ${GITHUB_ENV}
@@ -235,7 +235,7 @@ fi
 
 
 function Diy_update() {
-bash <(curl -fsSL https://raw.githubusercontent.com/bootli/common/main/custom/ubuntu.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/JimWails/common/main/custom/ubuntu.sh)
 if [[ $? -ne 0 ]];then
   TIME r "依赖安装失败，请检测网络后再次尝试!"
   exit 1
@@ -307,9 +307,9 @@ COOLSNOWWOLF)
 #find . -type d -name "r8168" -o -name "r8101" -o -name "r8125" |grep 'danshui' |xargs -i rm -rf {}
     git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon "${HOME_PATH}/package/lean/luci-theme-argon"
     git clone -b 18.06 https://github.com/jerrykuku/luci-app-argon-config "${HOME_PATH}/package/lean/luci-app-argon-config"
-    git clone https://github.com/bootli/luci-app-v2ray-server "${HOME_PATH}/feeds/luci/applications/luci-app-v2ray-server"
-    git clone https://github.com/bootli/luci-app-samba4 "${HOME_PATH}/feeds/luci/applications/luci-app-samba4"
-    git clone https://github.com/bootli/libuild "${HOME_PATH}/package/libuild"
+    git clone https://github.com/JimWails/luci-app-v2ray-server "${HOME_PATH}/feeds/luci/applications/luci-app-v2ray-server"
+    git clone https://github.com/JimWails/luci-app-samba4 "${HOME_PATH}/feeds/luci/applications/luci-app-samba4"
+    git clone https://github.com/JimWails/libuild "${HOME_PATH}/package/libuild"
     git clone https://github.com/sirpdboy/luci-app-ddns-go "${HOME_PATH}/package/ddns-go"
  
     if [[ ! -f "${HOME_PATH}/target/linux/ramips/mt7621/config-5.15" ]]; then
@@ -1161,7 +1161,7 @@ fi
 if [[ `grep -c "CONFIG_PACKAGE_luci-theme-argon=y" ${HOME_PATH}/.config` -eq '1' ]]; then
   pmg="$(echo "$(date +%d)" | sed 's/^.//g')"
   mkdir -p ${HOME_PATH}/files/www/luci-static/argon/background
-  curl -fsSL https://raw.githubusercontent.com/bootli/image/main/jpg/jpg/1.jpg -o ${HOME_PATH}/files/www/luci-static/argon/background/moren.jpg
+  curl -fsSL https://raw.githubusercontent.com/JimWails/image/main/jpg/jpg/1.jpg -o ${HOME_PATH}/files/www/luci-static/argon/background/moren.jpg
   if [[ $? -ne 0 ]]; then
     echo "拉取文件错误,请检测网络"
     exit 1
@@ -1513,9 +1513,9 @@ fi
 if [[ ! "${weizhicpu}" == "1" ]] && [[ "${AdGuardHome_Core}" == "1" ]]; then
   echo "正在执行：给adguardhome下载核心"
   rm -rf ${HOME_PATH}/AdGuardHome && rm -rf ${HOME_PATH}/files/usr/bin
-  wget -q https://github.com/bootli/common/releases/download/API/AdGuardHome.api -O AdGuardHome.api
+  wget -q https://github.com/JimWails/common/releases/download/API/AdGuardHome.api -O AdGuardHome.api
   if [[ $? -ne 0 ]];then
-    curl -fsSL https://github.com/bootli/common/releases/download/API/AdGuardHome.api -o AdGuardHome.api
+    curl -fsSL https://github.com/JimWails/common/releases/download/API/AdGuardHome.api -o AdGuardHome.api
   fi
   latest_ver="$(grep -E 'tag_name' 'AdGuardHome.api' |grep -E 'v[0-9.]+' -o 2>/dev/null)"
   rm -rf AdGuardHome.api
@@ -1604,7 +1604,7 @@ chmod -R +x ${FOLDER_NAME2}
 cd ${FOLDER_NAME2}
 git add .
 git commit -m "启动打包Amlogic/Rockchip固件(${SOURCE}-${LUCI_EDITION})"
-git push --force "https://${REPO_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:main
+git push --force "https://${GITHUB_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:main
 }
 
 function firmware_jiance() {
@@ -1631,11 +1631,11 @@ export kernel_repo="ophub/kernel"
 [[ -z "${kernel_usage}" ]] && export kernel_usage="stable"
 [[ -z "${UPLOAD_WETRANSFER}" ]] && export UPLOAD_WETRANSFER="true"
 if [[ -z "${amlogic_kernel}" ]]; then
-  curl -fsSL https://github.com/bootli/common/releases/download/API/${kernel_usage}.api -o ${HOME_PATH}/${kernel_usage}.api
+  curl -fsSL https://github.com/JimWails/common/releases/download/API/${kernel_usage}.api -o ${HOME_PATH}/${kernel_usage}.api
   export amlogic_kernel="$(grep -Eo '"name": "[0-9]+\.[0-9]+\.[0-9]+\.tar.gz"' ${HOME_PATH}/${kernel_usage}.api |grep -Eo "[0-9]+\.[0-9]+\.[0-9]+" |awk 'END {print}' |sed s/[[:space:]]//g)"
   [[ -z "${amlogic_kernel}" ]] && export amlogic_kernel="5.10.170"
 fi
-export gh_token="${REPO_TOKEN}"
+export gh_token="${GITHUB_TOKEN}"
 
 echo "芯片型号：${amlogic_model}"
 echo "使用内核：${amlogic_kernel}"
@@ -1648,7 +1648,7 @@ git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git ${GITHUB_
 if [[ `ls -1 "${FIRMWARE_PATH}" |grep -c ".*.tar.gz"` -eq '1' ]]; then
   cp -Rf ${FIRMWARE_PATH}/*.tar.gz ${GITHUB_WORKSPACE}/amlogic/openwrt-armvirt/openwrt-armvirt-64-default-rootfs.tar.gz && sync
 else
-  curl -H "Authorization: Bearer ${REPO_TOKEN}" https://api.github.com/repos/${GIT_REPOSITORY}/releases/tags/targz -o targz.api
+  curl -H "Authorization: Bearer ${GITHUB_TOKEN}" https://api.github.com/repos/${GIT_REPOSITORY}/releases/tags/targz -o targz.api
   if [[ $? -ne 0 ]];then
     TIME r "下载api失败"
     exit 1
@@ -1783,7 +1783,7 @@ BRANCH_HEAD="$(git rev-parse --abbrev-ref HEAD)"
 git add .
 git commit -m "${kaisbianyixx}-${FOLDER_NAME}-${LUCI_EDITION}-${TARGET_PROFILE}固件"
 echo "准备推送Commit"
-git push --force "https://${REPO_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:${BRANCH_HEAD}
+git push --force "https://${GITHUB_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:${BRANCH_HEAD}
 }
 
 
@@ -1856,7 +1856,7 @@ if [[ "${Continue_selecting}" == "1" ]]; then
   BRANCH_HEAD="$(git rev-parse --abbrev-ref HEAD)"
   git add .
   git commit -m "${chonglaixx}-${FOLDER_NAME}-${LUCI_EDITION}-${TARGET_PROFILE}固件"
-  git push --force "https://${REPO_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:${BRANCH_HEAD}
+  git push --force "https://${GITHUB_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:${BRANCH_HEAD}
   exit 1
 fi
 }
@@ -1871,7 +1871,7 @@ fi
 all_workflows_list="josn_api_workflows"
 curl -s \
 -H "Accept: application/vnd.github+json" \
--H "Authorization: Bearer ${REPO_TOKEN}" \
+-H "Authorization: Bearer ${GITHUB_TOKEN}" \
 https://api.github.com/repos/${GIT_REPOSITORY}/actions/runs |
 jq -c '.workflow_runs[] | select(.conclusion == "failure") | {date: .updated_at, id: .id, name: .name, run_number: .run_number}' \
 >${all_workflows_list}
@@ -1884,7 +1884,7 @@ if [[ -f "josn_api" && -n "$(cat josn_api | jq -r .id)" ]]; then
       curl -s \
       -X DELETE \
       -H "Accept: application/vnd.github+json" \
-      -H "Authorization: Bearer ${REPO_TOKEN}" \
+      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
       https://api.github.com/repos/${GIT_REPOSITORY}/actions/runs/${run_id}
     }
   done
@@ -1977,13 +1977,13 @@ else
     TIME r "把定时自动更新插件编译进固件: 关闭"
   fi
 fi
-if [[ "${UPDATE_FIRMWARE_ONLINE}" == "true" ]] && [[ -z "${REPO_TOKEN}" ]]; then
+if [[ "${UPDATE_FIRMWARE_ONLINE}" == "true" ]] && [[ -z "${GITHUB_TOKEN}" ]]; then
   echo
   echo
-  TIME r "您虽然开启了编译在线更新固件操作,但是您的[REPO_TOKEN]密匙为空,"
+  TIME r "您虽然开启了编译在线更新固件操作,但是您的[GITHUB_TOKEN]密匙为空,"
   TIME r "无法将固件发布至云端,已为您自动关闭了编译在线更新固件"
   echo
-elif [[ "${UPDATE_FIRMWARE_ONLINE}" == "true" ]] && [[ -n "${REPO_TOKEN}" ]]; then
+elif [[ "${UPDATE_FIRMWARE_ONLINE}" == "true" ]] && [[ -n "${GITHUB_TOKEN}" ]]; then
   echo
   TIME l "定时自动更新信息"
   TIME z "插件版本: ${AutoUpdate_Version}"
