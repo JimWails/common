@@ -2067,7 +2067,6 @@ Make_defconfig
 Diy_Publicarea2
 Diy_adguardhome
 Diy_upgrade2
-Diy_wifimodules
 }
 
 function Diy_menu5() {
