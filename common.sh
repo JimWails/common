@@ -31,7 +31,7 @@ COOLSNOWWOLF)
   variable REPO_URL="https://github.com/coolsnowwolf/lede"
   variable SOURCE="Lede"
   variable SOURCE_OWNER="Lean"
-  variable LUCI_EDITION="23.05"
+  variable LUCI_EDITION="24.10"
   variable DISTRIB_SOURCECODE="lede"
   variable GENE_PATH="${HOME_PATH}/package/base-files/luci/bin/config_generate"
 ;;
